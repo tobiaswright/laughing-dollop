@@ -9,11 +9,10 @@ interface Item {
 }
 
 @Component({
-  selector: 'app-weekly-counter',
-  standalone: true,
-  imports: [AsyncPipe],
-  templateUrl: './weekly-counter.component.html',
-  styleUrl: './weekly-counter.component.css'
+    selector: 'app-weekly-counter',
+    imports: [AsyncPipe],
+    templateUrl: './weekly-counter.component.html',
+    styleUrl: './weekly-counter.component.css'
 })
 export class WeeklyCounterComponent {
 

@@ -4,11 +4,10 @@ import { HeaderComponent } from "./header/header.component";
 import { WeeklyCounterComponent } from "./dashboard/weekly-counter/weekly-counter.component";
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [HeaderComponent, WeeklyCounterComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    imports: [HeaderComponent, WeeklyCounterComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
   title = 'laughing-dollop';
