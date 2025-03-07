@@ -1,8 +1,9 @@
-<p>{{ counter }}/<span [class.active]="counter > 10">10</span></p>
+<p>{{ count.weeklyCount }}/<span [class.active]="count.weeklyCount">10</span></p>
+<p>Total number of Jobs apllied: {{ count.totalCount }}</p>
 <button (click)="advanceCounter()">I've applied for a job!</button>
 
 
-@for(item of items(); track item) 
+<!-- @for(item of items(); track item) 
 {
     {{item}}
-}
+} -->

@@ -1,50 +1,57 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, effect, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { collection, collectionData, Firestore, query } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { doc, Firestore, getDoc } from '@angular/fire/firestore';
+import { serverTimestamp, setDoc, Timestamp } from 'firebase/firestore';
 
-interface Item {
-  counter: number
+interface Count {
+  totalCount: number,
+  weeklyCount: number,
+  prevMonday: Timestamp
 }
 
 @Component({
     selector: 'app-weekly-counter',
-    imports: [AsyncPipe],
+    standalone: true,
     templateUrl: './weekly-counter.component.html',
     styleUrl: './weekly-counter.component.css'
 })
 export class WeeklyCounterComponent {
+  private firestore: Firestore = inject(Firestore);
+  public count: Count = {weeklyCount: 0,totalCount: 0, prevMonday: new Timestamp(0,0) }
+  private statsDocRef = doc(this.firestore,"jobStats", "i7SetdpGJsaeEmvF5z3W");
+  private prevMonday = new Date();
 
-    firestore: Firestore = inject(Firestore);  
-    aCollection = collection(this.firestore,"colorTest");
+  constructor() {
+    getDoc(this.statsDocRef)
+    .then((stats)=>{
+        this.count = stats.data() as Count;
+        // https://stackoverflow.com/questions/35088088/javascript-for-getting-the-previous-monday/52750444#52750444
+        this.prevMonday.setDate(this.prevMonday.getDate() - (this.prevMonday.getDay() + 6) % 7);
+      }
+    )
+  }
 
-  // q = query(this.aCollection);
-  items = toSignal(collectionData(this.aCollection));
+  public advanceCounter(): void {
+    if (this.resetWeeklyCounter()) {
+      this.count.weeklyCount = 0;
+      let newMonday = new Date();
+      newMonday.setDate(this.prevMonday.getDate()+7);
+      this.count.prevMonday = new Timestamp(newMonday.getTime()/1000,0);
+    }
+    this.count.weeklyCount++;
+    this.count.totalCount++;
+    setDoc(this.statsDocRef, this.count);
+  }
 
+  private resetWeeklyCounter(): boolean {
+    const d = new Date();
+    const nextSunday = new Date(this.prevMonday.getTime()/1000);
+    nextSunday.setDate(this.prevMonday.getDate()+7);
 
-// firestore: Firestore = inject(Firestore);
-// statsCollection = collection(this.firestore,"jobStats");
-// teest$: Observable<any>;
-// items = toSignal(this.teest);
-counter = 0;
-
-constructor() {
-  // this.teest$ = collectionData<any>(this.statsCollection);
-  // this.teest$ =  collectionData(statsCollection)
-  // console.log(this.statsCollection)
-  effect(()=>{
-    console.log("allod", this.items());
-  })
-  
-  // this.item$ = collectionData(statsCollection) as Observable<any>
-  // this.item$
-  // console.log(this.item$)
-
-}
-
-advanceCounter() {
-  const currentCount = this.counter++;
-  // this.statsCollection.
-}
+    if ( nextSunday.getDate() > d.getDate()) {
+      return false;
+    }
+    return true;
+  }
 }

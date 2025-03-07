@@ -5,6 +5,7 @@ import { WeeklyCounterComponent } from "./dashboard/weekly-counter/weekly-counte
 
 @Component({
     selector: 'app-root',
+    standalone: true,
     imports: [HeaderComponent, WeeklyCounterComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
