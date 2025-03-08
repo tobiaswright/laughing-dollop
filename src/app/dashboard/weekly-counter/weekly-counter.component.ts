@@ -1,14 +1,6 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { doc, Firestore, getDoc } from '@angular/fire/firestore';
-import { serverTimestamp, setDoc, Timestamp } from 'firebase/firestore';
-
-interface Count {
-  totalCount: number,
-  weeklyCount: number,
-  prevMonday: Timestamp
-}
+import { DataService } from '../../data.service';
+import { Stats } from '../../app.model';
 
 @Component({
     selector: 'app-weekly-counter',
@@ -17,41 +9,30 @@ interface Count {
     styleUrl: './weekly-counter.component.css'
 })
 export class WeeklyCounterComponent {
-  private firestore: Firestore = inject(Firestore);
-  public count: Count = {weeklyCount: 0,totalCount: 0, prevMonday: new Timestamp(0,0) }
-  private statsDocRef = doc(this.firestore,"jobStats", "i7SetdpGJsaeEmvF5z3W");
-  private prevMonday = new Date();
+  private data: DataService = inject(DataService);
+  public stats: Stats = {} as Stats
 
   constructor() {
-    getDoc(this.statsDocRef)
-    .then((stats)=>{
-        this.count = stats.data() as Count;
-        // https://stackoverflow.com/questions/35088088/javascript-for-getting-the-previous-monday/52750444#52750444
-        this.prevMonday.setDate(this.prevMonday.getDate() - (this.prevMonday.getDay() + 6) % 7);
-      }
-    )
+    this.data.getStats().then((data)=>{
+      this.stats = data.data() as Stats;
+      this.checkForWeeklyTotalReset();
+    })
   }
 
   public advanceCounter(): void {
-    if (this.resetWeeklyCounter()) {
-      this.count.weeklyCount = 0;
-      let newMonday = new Date();
-      newMonday.setDate(this.prevMonday.getDate()+7);
-      this.count.prevMonday = new Timestamp(newMonday.getTime()/1000,0);
-    }
-    this.count.weeklyCount++;
-    this.count.totalCount++;
-    setDoc(this.statsDocRef, this.count);
+    let newState = {...this.stats, weeklyCount: ++this.stats.weeklyCount, totalCount: ++this.stats.totalCount }
+    this.data.setCount(newState);
   }
 
-  private resetWeeklyCounter(): boolean {
-    const d = new Date();
-    const nextSunday = new Date(this.prevMonday.getTime()/1000);
-    nextSunday.setDate(this.prevMonday.getDate()+7);
+  private checkForWeeklyTotalReset() {
+    const today = new Date();
+    const lastMonday = new Date(0);
+    lastMonday.setUTCSeconds(this.stats.lastMonday.seconds);
+    const nextSundayIdx = lastMonday.getDate()+6;
+    const offset = lastMonday.getDate()+7;
 
-    if ( nextSunday.getDate() > d.getDate()) {
-      return false;
+    if ( nextSundayIdx < today.getDate()) {
+      this.data.setWeeklyTotalToZero(offset, this.stats);
     }
-    return true;
   }
 }
