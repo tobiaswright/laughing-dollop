@@ -1,5 +1,5 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { doc, Firestore, getDoc, setDoc, Timestamp } from '@angular/fire/firestore';
+import { inject, Injectable } from '@angular/core';
+import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
 import { Stats } from './app.model';
 
 @Injectable({
@@ -19,14 +19,8 @@ export class DataService {
     setDoc(this.statsDocRef, stats);
   }
 
-  public setWeeklyTotalToZero(offset: number, stats: Stats) {
-    const setNewMonday = new Date();
-    setNewMonday.setDate(offset);
-    const secondsFromEpoch = setNewMonday.getTime()/1000;
-    const timestamp = new Timestamp(secondsFromEpoch,0);
-
-    let newState = {...stats, weeklyCount:0, lastMonday: timestamp}
-    this.setJobStatsDoc(newState)
+  public setWeeklyTotalToZero(stats: Stats) {
+    this.setJobStatsDoc(stats)
   }
 
   private getDocumentReference( collection: string, document: string) {
