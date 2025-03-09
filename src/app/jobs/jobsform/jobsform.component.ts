@@ -1,14 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface Job {
-  url: string,
-  title: string,
-  source: string,
-  notes: string,
-  timestamp: Date,
-  status: string
-}
+import { Job } from '../../app.model';
+import { DataService } from '../../data.service';
 
 @Component({
   selector: 'app-jobsform',
@@ -17,7 +10,9 @@ interface Job {
   templateUrl: './jobsform.component.html',
   styleUrl: './jobsform.component.css'
 })
+
 export class JobsformComponent {
+  data = inject(DataService);
   savedJobs: Job[] = [];
 
   jobDetails: Job = {
@@ -25,15 +20,15 @@ export class JobsformComponent {
     title: '',
     source: '',
     notes: '',
+    company: '',
     timestamp: new Date(),
     status: 'applied'
   }
   constructor() {}
 
-  submitForm(jobForm: any) {
-      // console.log(this.jobDetails)
-      this.savedJobs.push(this.jobDetails);
-      this.jobDetails = {} as Job
+  submitForm() {
+      this.data.addJob(this.jobDetails);
+      this.savedJobs.push(this.jobDetails)
   }
 
 }

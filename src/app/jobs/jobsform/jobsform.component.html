@@ -1,14 +1,19 @@
-<form #jobForm="ngForm" (ngSubmit)="submitForm(jobForm)">
+<form (ngSubmit)="submitForm()">
    
     <div class="form-group">
       <label for="name">URL: </label>
-      <input type="text" class="form-control" id="url" name="name" [(ngModel)]="jobDetails.url">
+      <input type="text" class="form-control" id="url" name="url" [(ngModel)]="jobDetails.url">
     </div>
     
     <div class="form-group">
       <label for="email">Title: </label>
       <input type="text" class="form-control" id="title" name="title" [(ngModel)]="jobDetails.title">
     </div>
+
+    <div class="form-group">
+        <label for="email">Company: </label>
+        <input type="text" class="form-control" id="company" name="company" [(ngModel)]="jobDetails.company">
+      </div>
 
     <div class="form-group">
         <label for="email">Source: </label>
@@ -25,7 +30,7 @@
 
 
 <ul>
-    @for (job of savedJobs; track jobDetails) {
+    @for (job of savedJobs; track savedJobs) {
         <li>{{ job.title }}</li>
     }
 </ul>

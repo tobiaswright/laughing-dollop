@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
-import { Stats } from './app.model';
+import { doc, Firestore, getDoc, setDoc, collection } from '@angular/fire/firestore';
+import { Job, Stats } from './app.model';
+import { addDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ import { Stats } from './app.model';
 export class DataService {
   private firestore: Firestore = inject(Firestore);
   private statsDocRef = this.getDocumentReference( "jobStats", "i7SetdpGJsaeEmvF5z3W");
+
+  
 
   constructor() {}
 
@@ -25,6 +28,10 @@ export class DataService {
 
   private getDocumentReference( collection: string, document: string) {
     return doc(this.firestore, collection, document)
+  }
+
+  public addJob(job: Job) {
+    addDoc(collection(this.firestore, 'jobs'), job)
   }
 
   public setCount(stats: Stats) {

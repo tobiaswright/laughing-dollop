@@ -5,3 +5,13 @@ export interface Stats {
   weeklyCount: number,
   lastMonday: Timestamp
 }
+
+export interface Job {
+  url: string,
+  title: string,
+  source: string,
+  notes: string,
+  company: string,
+  timestamp: Date,
+  status: string
+}
