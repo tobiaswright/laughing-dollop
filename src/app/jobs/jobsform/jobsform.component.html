@@ -1,4 +1,4 @@
-<form (ngSubmit)="submitForm()">
+<form #addJobForm="ngForm" (ngSubmit)="onSubmitForm(addJobForm)">
    
     <div class="form-group">
       <label for="name">URL: </label>
@@ -27,10 +27,3 @@
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
-
-
-<ul>
-    @for (job of savedJobs; track savedJobs) {
-        <li>{{ job.title }}</li>
-    }
-</ul>

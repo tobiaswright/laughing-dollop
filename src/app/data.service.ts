@@ -1,7 +1,6 @@
-import { inject, Injectable } from '@angular/core';
-import { doc, Firestore, getDoc, setDoc, collection } from '@angular/fire/firestore';
+import { computed, inject, Injectable, signal } from '@angular/core';
+import { doc, Firestore, getDoc, setDoc, addDoc, collection, getDocs } from '@angular/fire/firestore';
 import { Job, Stats } from './app.model';
-import { addDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +8,10 @@ import { addDoc } from 'firebase/firestore';
 export class DataService {
   private firestore: Firestore = inject(Firestore);
   private statsDocRef = this.getDocumentReference( "jobStats", "i7SetdpGJsaeEmvF5z3W");
-
+  private jobs = signal<Job[]>([]);
   
-
-  constructor() {}
-
-  private getJobStatsDoc() {
-    return getDoc(this.statsDocRef);
+  constructor() {
+    this.getJobsFromDB();
   }
 
   private setJobStatsDoc(stats: Stats) {
@@ -30,15 +26,41 @@ export class DataService {
     return doc(this.firestore, collection, document)
   }
 
-  public addJob(job: Job) {
+  public async addJob(job: Job) {
     addDoc(collection(this.firestore, 'jobs'), job)
+    .then((ref)=>{
+      console.log(job)
+      this.jobs.update( (currData)=>[...currData, {...job, id: ref.id}]);
+      console.log(ref.id, this.jobs())
+    })
+    // let result = await this.getStats();
+    // let stats = result.data() as Stats;
+    // let newState = {...stats, weeklyCount: ++stats.weeklyCount, totalCount: ++stats.totalCount }
+    // this.setJobStatsDoc(newState);
+    
+  }
+
+  private getJobsFromDB() {
+    return getDocs(collection(this.firestore, "jobs"))
+    .then((result)=>{
+        let results: Job[] = [];
+        result.forEach((doc)=> {
+          let d = {...doc.data(), id:doc.id} as Job;
+          results.push(d);
+        });      
+        this.jobs.set(results);
+      });;   
+  }
+
+  public getJobs() {
+    return computed(() => this.jobs())   
   }
 
   public setCount(stats: Stats) {
     this.setJobStatsDoc(stats);
   }
 
-  public getStats() {
-    return this.getJobStatsDoc();
+  public async getStats() {
+    return await getDoc(this.statsDocRef);
   }
 }

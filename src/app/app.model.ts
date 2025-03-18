@@ -7,6 +7,7 @@ export interface Stats {
 }
 
 export interface Job {
+  id: string | null,
   url: string,
   title: string,
   source: string,

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Job } from '../../app.model';
 import { DataService } from '../../data.service';
 
@@ -13,9 +13,9 @@ import { DataService } from '../../data.service';
 
 export class JobsformComponent {
   data = inject(DataService);
-  savedJobs: Job[] = [];
 
   jobDetails: Job = {
+    id: null,
     url: '',
     title: '',
     source: '',
@@ -26,9 +26,10 @@ export class JobsformComponent {
   }
   constructor() {}
 
-  submitForm() {
-      this.data.addJob(this.jobDetails);
-      this.savedJobs.push(this.jobDetails)
+  onSubmitForm(form: NgForm) {
+      let formData = {...this.jobDetails};
+      this.data.addJob(formData);
+      form.resetForm();
   }
 
 }
