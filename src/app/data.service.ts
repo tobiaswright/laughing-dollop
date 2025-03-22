@@ -8,13 +8,16 @@ import { Job, Stats } from './app.model';
 export class DataService {
   private firestore: Firestore = inject(Firestore);
   private statsDocRef = this.getDocumentReference( "jobStats", "i7SetdpGJsaeEmvF5z3W");
+  private stats = signal<Stats>({} as Stats);
   private jobs = signal<Job[]>([]);
   
   constructor() {
     this.getJobsFromDB();
+    this.getStatsFromDB();
   }
 
   private setJobStatsDoc(stats: Stats) {
+    this.stats.set(stats);
     setDoc(this.statsDocRef, stats);
   }
 
@@ -29,14 +32,11 @@ export class DataService {
   public async addJob(job: Job) {
     addDoc(collection(this.firestore, 'jobs'), job)
     .then((ref)=>{
-      console.log(job)
       this.jobs.update( (currData)=>[...currData, {...job, id: ref.id}]);
-      console.log(ref.id, this.jobs())
     })
-    // let result = await this.getStats();
-    // let stats = result.data() as Stats;
-    // let newState = {...stats, weeklyCount: ++stats.weeklyCount, totalCount: ++stats.totalCount }
-    // this.setJobStatsDoc(newState);
+    let stats = this.getStats();
+    let newState = {...stats(), weeklyCount: ++stats().weeklyCount, totalCount: ++stats().totalCount }
+    this.setJobStatsDoc(newState);
     
   }
 
@@ -49,7 +49,7 @@ export class DataService {
           results.push(d);
         });      
         this.jobs.set(results);
-      });;   
+      });
   }
 
   public getJobs() {
@@ -60,7 +60,14 @@ export class DataService {
     this.setJobStatsDoc(stats);
   }
 
-  public async getStats() {
-    return await getDoc(this.statsDocRef);
+  private async getStatsFromDB() {
+    getDoc(this.statsDocRef)
+    .then((result) => {
+      this.stats.set(result.data() as Stats);
+    })
+  }
+
+  public getStats() {
+    return computed(() => this.stats());
   }
 }

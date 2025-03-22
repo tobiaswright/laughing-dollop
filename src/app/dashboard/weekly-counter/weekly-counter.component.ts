@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, effect, inject, OnInit } from '@angular/core';
 import { DataService } from '../../data.service';
 import { Stats } from '../../app.model';
 import { Timestamp } from '@angular/fire/firestore';
@@ -11,19 +11,21 @@ import { Timestamp } from '@angular/fire/firestore';
 })
 export class WeeklyCounterComponent implements OnInit {
   private data: DataService = inject(DataService);
-  public stats: Stats = {} as Stats
+  public stats = this.data.getStats();
+  public isLoaded = computed(()=>this.stats().lastMonday ? true : false)
 
-  constructor() {}
-
-  ngOnInit(): void {
-    this.data.getStats().then((data)=>{
-      this.stats = data.data() as Stats;
-      this.checkForWeeklyTotalReset();
+  constructor() {
+    effect(()=>{
+      if(this.isLoaded()) {
+        this.checkForWeeklyTotalReset();
+      }
     })
   }
 
+  ngOnInit(): void {}
+
   public advanceCounter(): void {
-    let newState = {...this.stats, weeklyCount: ++this.stats.weeklyCount, totalCount: ++this.stats.totalCount }
+    let newState = {...this.stats(), weeklyCount: ++this.stats().weeklyCount, totalCount: ++this.stats().totalCount }
     this.data.setCount(newState);
   }
 
@@ -31,7 +33,7 @@ export class WeeklyCounterComponent implements OnInit {
   private checkForWeeklyTotalReset() {
     const today = new Date();
     const lastMonday = new Date(0);
-    lastMonday.setUTCSeconds(this.stats.lastMonday.seconds);
+    lastMonday.setUTCSeconds(this.stats().lastMonday.seconds);
     const thisSundayIdx = lastMonday.getDate()+6;
     const newMondayIdx = lastMonday.getDate()+7;
 
@@ -41,9 +43,9 @@ export class WeeklyCounterComponent implements OnInit {
       const secondsFromEpoch = setNewMonday.getTime()/1000;
       const newMonday = new Timestamp(secondsFromEpoch,0);
   
-      let newState = {...this.stats, weeklyCount:0, lastMonday: newMonday}
+      let newState = {...this.stats(), weeklyCount:0, lastMonday: newMonday}
 
       this.data.setWeeklyTotalToZero(newState);
     }
-  }
+  };
 }

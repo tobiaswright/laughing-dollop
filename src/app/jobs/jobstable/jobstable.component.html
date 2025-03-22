@@ -1,5 +1,5 @@
-<ul>
+<table>
 @for(job of jobs(); track job.id) {
-    <li>{{ job.title }}</li>
+    <tr app-job-entry [job]="job"></tr>
 }
-</ul>
+</table>
