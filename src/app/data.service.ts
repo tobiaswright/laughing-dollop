@@ -1,17 +1,21 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, OnInit, signal } from '@angular/core';
 import { doc, Firestore, getDoc, setDoc, addDoc, collection, getDocs } from '@angular/fire/firestore';
 import { Job, Stats } from './app.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
+export class DataService implements OnInit {
   private firestore: Firestore = inject(Firestore);
   private statsDocRef = this.getDocumentReference( "jobStats", "i7SetdpGJsaeEmvF5z3W");
   private stats = signal<Stats>({} as Stats);
   private jobs = signal<Job[]>([]);
   
-  constructor() {
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  public start() {
     this.getJobsFromDB();
     this.getStatsFromDB();
   }
@@ -19,6 +23,19 @@ export class DataService {
   private setJobStatsDoc(stats: Stats) {
     this.stats.set(stats);
     setDoc(this.statsDocRef, stats);
+  }
+
+  private setJobDoc(job: Job) {
+    this.jobs.update((currJobs)=>{
+      return currJobs.filter((item)=> {
+        if (item.id === job.id) {
+          item = job;
+        }
+        return item;
+      })
+    })
+    const jobDocRef = this.getDocumentReference( "jobs", job.id as string);
+    setDoc(jobDocRef, job);
   }
 
   public setWeeklyTotalToZero(stats: Stats) {
@@ -69,5 +86,9 @@ export class DataService {
 
   public getStats() {
     return computed(() => this.stats());
+  }
+
+  public setStatus(job: Job) {
+    this.setJobDoc(job);
   }
 }

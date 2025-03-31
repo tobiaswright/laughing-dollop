@@ -15,4 +15,5 @@ export interface Job {
   company: string,
   timestamp: Date,
   status: string
+  // status: 'applied' | 'rejected' | 'screening' | 'interview' | 'techinical' | 'offer'
 }
