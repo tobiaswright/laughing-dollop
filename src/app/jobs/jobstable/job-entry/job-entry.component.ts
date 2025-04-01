@@ -16,12 +16,14 @@ export class JobEntryComponent {
 
   public setStatus() {
     let idx = this.arr.indexOf(this.job().status);
-    if (idx === this.arr.length) {
+    if (idx === this.arr.length-1) {
       idx = 0;
     } else {
       idx++;
     }
 
-    this.data.setStatus(this.job());
+    const updatedJob = {...this.job(), status: this.arr[idx]}
+
+    this.data.setStatus(updatedJob);
   }
 }

@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, OnInit, signal } from '@angular/core';
-import { doc, Firestore, getDoc, setDoc, addDoc, collection, getDocs } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc, addDoc, collection, getDocs, Timestamp } from '@angular/fire/firestore';
 import { Job, Stats } from './app.model';
 
 @Injectable({
@@ -26,14 +26,6 @@ export class DataService implements OnInit {
   }
 
   private setJobDoc(job: Job) {
-    this.jobs.update((currJobs)=>{
-      return currJobs.filter((item)=> {
-        if (item.id === job.id) {
-          item = job;
-        }
-        return item;
-      })
-    })
     const jobDocRef = this.getDocumentReference( "jobs", job.id as string);
     setDoc(jobDocRef, job);
   }
@@ -70,7 +62,14 @@ export class DataService implements OnInit {
   }
 
   public getJobs() {
-    return computed(() => this.jobs())   
+    return computed(() => {
+      let jobs = this.jobs()
+      jobs.sort( (a , b) => {
+        //TODO: Fix type to be Timestamp instead on Date
+        return (b.timestamp as unknown as Timestamp).seconds - (a.timestamp as unknown as Timestamp).seconds
+      });
+      return jobs;
+    })   
   }
 
   public setCount(stats: Stats) {
@@ -88,7 +87,13 @@ export class DataService implements OnInit {
     return computed(() => this.stats());
   }
 
-  public setStatus(job: Job) {
-    this.setJobDoc(job);
+  public setStatus(selectedJob: Job) {
+    this.jobs.update( (currJobs)=>{
+      let idx = currJobs.findIndex((job)=>job.id === selectedJob.id);
+      currJobs[idx] = selectedJob;
+      return currJobs;
+    });
+
+    this.setJobDoc(selectedJob);
   }
 }
