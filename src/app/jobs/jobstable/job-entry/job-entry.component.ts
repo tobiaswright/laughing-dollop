@@ -24,7 +24,7 @@ export class JobEntryComponent {
 
     const updatedJob = {...this.job(), status: this.arr[idx]}
 
-    this.data.setStatus(updatedJob);
+    this.data.updateJob(updatedJob);
   }
 
   public delete(job: Job){
