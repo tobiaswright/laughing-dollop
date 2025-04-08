@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, OnInit, signal } from '@angular/core';
-import { doc, Firestore, getDoc, setDoc, addDoc, collection, getDocs, Timestamp } from '@angular/fire/firestore';
+import { doc, Firestore, getDoc, setDoc, addDoc, collection, getDocs, Timestamp, deleteDoc  } from '@angular/fire/firestore';
 import { Job, Stats } from './app.model';
 
 @Injectable({
@@ -20,22 +20,27 @@ export class DataService implements OnInit {
     this.getStatsFromDB();
   }
 
-  private setJobStatsDoc(stats: Stats) {
-    this.stats.set(stats);
-    setDoc(this.statsDocRef, stats);
+  private getDocumentReference( collection: string, document: string) {
+    return doc(this.firestore, collection, document)
+  }
+
+  //db functions
+  private deleteJobDoc(job: Job) {
+    const jobDocRef = this.getDocumentReference( "jobs", job.id as string);
+    deleteDoc(jobDocRef);
+  }
+
+  // Job Function
+  public deleteJob(job: Job) {
+    this.jobs.update( (currJobs)=>{
+      return currJobs.filter((currJob)=>currJob.id != job.id)
+    });  
+    this.deleteJobDoc(job)
   }
 
   private setJobDoc(job: Job) {
     const jobDocRef = this.getDocumentReference( "jobs", job.id as string);
     setDoc(jobDocRef, job);
-  }
-
-  public setWeeklyTotalToZero(stats: Stats) {
-    this.setJobStatsDoc(stats)
-  }
-
-  private getDocumentReference( collection: string, document: string) {
-    return doc(this.firestore, collection, document)
   }
 
   public async addJob(job: Job) {
@@ -45,12 +50,12 @@ export class DataService implements OnInit {
     })
     let stats = this.getStats();
     let newState = {...stats(), weeklyCount: ++stats().weeklyCount, totalCount: ++stats().totalCount }
-    this.setJobStatsDoc(newState);
+    this.setStats(newState);
     
   }
 
   private getJobsFromDB() {
-    return getDocs(collection(this.firestore, "jobs"))
+    getDocs(collection(this.firestore, "jobs"))
     .then((result)=>{
         let results: Job[] = [];
         result.forEach((doc)=> {
@@ -72,21 +77,6 @@ export class DataService implements OnInit {
     })   
   }
 
-  public setCount(stats: Stats) {
-    this.setJobStatsDoc(stats);
-  }
-
-  private async getStatsFromDB() {
-    getDoc(this.statsDocRef)
-    .then((result) => {
-      this.stats.set(result.data() as Stats);
-    })
-  }
-
-  public getStats() {
-    return computed(() => this.stats());
-  }
-
   public setStatus(selectedJob: Job) {
     this.jobs.update( (currJobs)=>{
       let idx = currJobs.findIndex((job)=>job.id === selectedJob.id);
@@ -96,4 +86,22 @@ export class DataService implements OnInit {
 
     this.setJobDoc(selectedJob);
   }
+
+//Stats
+  public setStats(stats: Stats) {
+    this.stats.set(stats);
+    setDoc(this.statsDocRef, stats);
+  }
+
+  public getStats() {
+    return computed(() => this.stats());
+  }
+
+  private async getStatsFromDB() {
+    getDoc(this.statsDocRef)
+    .then((result) => {
+      this.stats.set(result.data() as Stats);
+    })
+  }
+  
 }

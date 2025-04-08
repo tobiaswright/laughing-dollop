@@ -26,7 +26,7 @@ export class WeeklyCounterComponent implements OnInit {
 
   public advanceCounter(): void {
     let newState = {...this.stats(), weeklyCount: ++this.stats().weeklyCount, totalCount: ++this.stats().totalCount }
-    this.data.setCount(newState);
+    this.data.setStats(newState);
   }
 
   // Weekly Total resets and runs from Monday to Sunday
@@ -45,7 +45,7 @@ export class WeeklyCounterComponent implements OnInit {
   
       let newState = {...this.stats(), weeklyCount:0, lastMonday: newMonday}
 
-      this.data.setWeeklyTotalToZero(newState);
+      this.data.setStats(newState);
     }
   };
 }

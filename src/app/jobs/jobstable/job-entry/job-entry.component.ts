@@ -26,4 +26,8 @@ export class JobEntryComponent {
 
     this.data.setStatus(updatedJob);
   }
+
+  public delete(job: Job){
+    this.data.deleteJob(job)
+  }
 }
