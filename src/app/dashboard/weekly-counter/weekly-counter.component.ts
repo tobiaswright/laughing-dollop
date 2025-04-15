@@ -34,10 +34,11 @@ export class WeeklyCounterComponent implements OnInit {
     const today = new Date();
     const lastMonday = new Date(0);
     lastMonday.setUTCSeconds(this.stats().lastMonday.seconds);
-    const thisSundayIdx = lastMonday.getDate()+6;
+    const thisSunday = new Date()
+    thisSunday.setDate(lastMonday.getDate()+6);
     const newMondayIdx = lastMonday.getDate()+7;
 
-    if (thisSundayIdx < today.getDate()) {
+    if (thisSunday.getDate() < today.getDate()) {
       const setNewMonday = new Date();
       setNewMonday.setDate(newMondayIdx);
       const secondsFromEpoch = setNewMonday.getTime()/1000;

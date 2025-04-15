@@ -13,7 +13,7 @@ export interface Job {
   source: string,
   notes: string,
   company: string,
-  timestamp: Date,
+  timestamp: Timestamp,
   status: string
   // status: 'applied' | 'rejected' | 'screening' | 'interview' | 'techinical' | 'offer'
 }

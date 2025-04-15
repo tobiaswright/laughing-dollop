@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Job } from '../../app.model';
 import { DataService } from '../../data.service';
+import { Timestamp } from "@angular/fire/firestore";
 
 @Component({
   selector: 'app-jobsform',
@@ -21,7 +22,7 @@ export class JobsformComponent {
     source: '',
     notes: '',
     company: '',
-    timestamp: new Date(),
+    timestamp: Timestamp.fromDate(new Date()),
     status: 'applied'
   }
   constructor() {}
