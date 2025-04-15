@@ -1,8 +1,11 @@
 @if(!isLoaded()) {
     <p>Stats are loading</p>
 } @else {
-    <p>{{ stats().weeklyCount }}/<span [class.active]="stats().weeklyCount">10</span></p>
-    <p>Total number of Jobs apllied: {{ stats().totalCount }}</p>
+    <p>Jobs applied for this week:</p>
+    <p class="counter">{{ stats().weeklyCount }}/<span [class.active]="stats().weeklyCount">10</span></p>
+
+    <p>Total number of Jobs applied:</p>
+    <p class="counter">{{ stats().totalCount }}</p>
 }
 
-<button (click)="advanceCounter()">I've applied for a job!</button>
+<button (click)="advanceCounter()" class="rounded-xl bg-orange-900 p-3 text-white font-bold mt-5">Add to Job Count</button>

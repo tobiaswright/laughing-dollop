@@ -1,0 +1,11 @@
+label {
+    display: block;
+    font-size: small;
+    font-weight: bold;
+}
+
+input, textarea {
+    border: 1px solid silver;
+    width: 100%;
+    margin-bottom: 10px;
+}

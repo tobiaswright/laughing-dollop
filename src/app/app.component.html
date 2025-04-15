@@ -1,10 +1,17 @@
 <app-header />
 
-<h3>Weekly Job Counter</h3>
-<app-weekly-counter />
+<div class="flex flex-row w-full">
+    <div>
+        <h3>Add new job</h3>
+        <app-jobsform />
+    
+        <h3>Jobs applies for</h3>
+        <app-jobstable />
+    </div>
+    <div>
+        <h3>Weekly Stats</h3>
+        <app-weekly-counter />
+    </div>
+</div>
 
-<h3>Add new job</h3>
-<app-jobsform />
 
-<h3>Jobs applies for:</h3>
-<app-jobstable />

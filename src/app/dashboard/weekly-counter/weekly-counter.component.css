@@ -1,3 +1,12 @@
 span.active {
     color: green
 }
+
+p.counter {
+    font-family: "Special Gothic Expanded One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 65px;
+    margin-top: -20px;
+    padding-bottom: 0;
+}
