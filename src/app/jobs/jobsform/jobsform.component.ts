@@ -22,6 +22,7 @@ export class JobsformComponent {
     source: '',
     notes: '',
     company: '',
+    contact: '',
     timestamp: Timestamp.fromDate(new Date()),
     status: 'applied'
   }

@@ -1,24 +1,29 @@
 <form #addJobForm="ngForm" (ngSubmit)="onSubmitForm(addJobForm)">
    
     <div class="form-group">
-      <label for="name">URL:</label>
+      <label for="url">URL:</label>
       <input type="text" class="form-control" id="url" name="url" [(ngModel)]="jobDetails.url">
     </div>
     
     <div class="form-group">
-      <label for="email">Title: </label>
+      <label for="title">Title: </label>
       <input type="text" class="form-control" id="title" name="title" [(ngModel)]="jobDetails.title">
     </div>
 
     <div class="form-group">
-        <label for="email">Company: </label>
+        <label for="company">Company: </label>
         <input type="text" class="form-control" id="company" name="company" [(ngModel)]="jobDetails.company">
       </div>
 
     <div class="form-group">
-        <label for="email">Source: </label>
+        <label for="source">Source: </label>
         <input type="text" class="form-control" id="source" name="source" [(ngModel)]="jobDetails.source">
       </div>
+
+    <div class="form-group">
+      <label for="contact">Contact: </label>
+      <input type="text" class="form-control" id="source" name="contact" [(ngModel)]="jobDetails.contact">
+    </div>
 
       <div class="form-group">
         <label for="email">Notes: </label>
