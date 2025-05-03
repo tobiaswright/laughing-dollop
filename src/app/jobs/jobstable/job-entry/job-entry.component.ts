@@ -1,10 +1,11 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { Job } from '../../../app.model';
 import { DataService } from '../../../data.service';
+import { JobCoverletterCreatorComponent } from "./job-coverletter-creator/job-coverletter-creator.component";
 
 @Component({
   selector: 'tr[app-job-entry]',
-  imports: [],
+  imports: [JobCoverletterCreatorComponent],
   templateUrl: './job-entry.component.html',
   styleUrl: './job-entry.component.css',
   standalone: true
@@ -13,11 +14,6 @@ export class JobEntryComponent {
   private data: DataService = inject(DataService);
   public job = input.required<Job>();
   arr = ["applied","rejected","screening","interview","techinical","offer"];
-  dateSubmitted: String | undefined;
-
-  ngOnInit() {
-    this.dateSubmitted = new Date(this.job().timestamp.toDate()).toLocaleDateString()
-  }
 
   public setStatus() {
     let idx = this.arr.indexOf(this.job().status);

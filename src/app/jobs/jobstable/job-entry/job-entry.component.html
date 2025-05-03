@@ -1,5 +1,8 @@
 <td><a href="{{job().url}}" class="underline">{{ job().title }}</a></td>
-<td>{{job().company}}</td>
-<td>{{dateSubmitted}}</td>
+<td><app-job-coverletter-creator [job]="job()"/></td>
+<td>{{job().company}} @if(this.job().contact) {
+    (<a class="underline" href="{{this.job().contact}}">link</a>)
+}</td>
+<td>{{job().timestamp.toDate().toLocaleDateString()}}</td>
 <td (click)="setStatus()">{{job().status}}</td>
 <td (click)="delete(job())"><button>X</button></td>
