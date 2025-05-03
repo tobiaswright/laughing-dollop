@@ -57,8 +57,7 @@ export class DataService implements OnInit {
     return computed(() => {
       let jobs = this.jobs()
       jobs.sort( (a , b) => {
-        //TODO: Fix type to be Timestamp instead on Date
-        return (b.timestamp as unknown as Timestamp).seconds - (a.timestamp as unknown as Timestamp).seconds
+        return (b.timestamp).seconds - (a.timestamp).seconds
       });
       return jobs;
     })   
