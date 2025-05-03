@@ -11,8 +11,13 @@ import { DataService } from '../../../data.service';
 })
 export class JobEntryComponent {
   private data: DataService = inject(DataService);
-  job = input.required<Job>();
-  arr = ["applied","rejected","screening","interview","techinical","offer"]
+  public job = input.required<Job>();
+  arr = ["applied","rejected","screening","interview","techinical","offer"];
+  dateSubmitted: String | undefined;
+
+  ngOnInit() {
+    this.dateSubmitted = new Date(this.job().timestamp.toDate()).toLocaleDateString()
+  }
 
   public setStatus() {
     let idx = this.arr.indexOf(this.job().status);
@@ -23,7 +28,6 @@ export class JobEntryComponent {
     }
 
     const updatedJob = {...this.job(), status: this.arr[idx]}
-
     this.data.updateJob(updatedJob);
   }
 

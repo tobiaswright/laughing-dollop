@@ -1,4 +1,5 @@
 <td><a href="{{job().url}}" class="underline">{{ job().title }}</a></td>
 <td>{{job().company}}</td>
+<td>{{dateSubmitted}}</td>
 <td (click)="setStatus()">{{job().status}}</td>
-<td (click)="delete(job())"><button>Delete</button></td>
+<td (click)="delete(job())"><button>X</button></td>
