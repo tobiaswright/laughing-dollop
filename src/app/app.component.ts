@@ -6,11 +6,12 @@ import { JobstableComponent } from './jobs/jobstable/jobstable.component';
 import { DataService } from './data.service';
 import { Auth,signInWithEmailAndPassword } from '@angular/fire/auth';
 import { credentials } from '../environments/credentials'
+import { JobFilterComponent } from "./jobs/job-filter/job-filter.component";
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [HeaderComponent, WeeklyCounterComponent, JobsformComponent, JobstableComponent],
+    imports: [HeaderComponent, WeeklyCounterComponent, JobsformComponent, JobstableComponent, JobFilterComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css'
 })

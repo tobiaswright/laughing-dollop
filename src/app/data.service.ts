@@ -10,6 +10,7 @@ export class DataService implements OnInit {
   private statsDocRef = this.getDocumentReference( "jobStats", "i7SetdpGJsaeEmvF5z3W");
   private stats = signal<Stats>({} as Stats);
   private jobs = signal<Job[]>([]);
+  private filterByCompany = signal("");
   
   constructor() {}
 
@@ -55,7 +56,15 @@ export class DataService implements OnInit {
 
   public getJobs() {
     return computed(() => {
-      let jobs = this.jobs()
+      let jobs = this.jobs();
+
+      if(this.filterByCompany()){
+        jobs = jobs.filter(item=>{
+          return item.company.toLowerCase().includes(this.filterByCompany().toLowerCase());
+        });
+      }
+
+
       jobs.sort( (a , b) => {
         return (b.timestamp).seconds - (a.timestamp).seconds
       });
@@ -83,6 +92,10 @@ export class DataService implements OnInit {
 
   public getStats() {
     return computed(() => this.stats());
+  }
+
+  public fllterByCompany(str: string) {
+    this.filterByCompany.set(str)
   }
 
   private getStatsFromDB() {
