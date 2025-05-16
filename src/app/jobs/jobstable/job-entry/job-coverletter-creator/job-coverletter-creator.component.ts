@@ -28,11 +28,11 @@ My previous experience at Microsoft as a Software Engineer and Evangelist Lead p
 
 Additionally, my tenure at Condé Nast and Victoria's Secret allowed me to hone my skills in front-end development and design, where I optimized frameworks, enhanced APIs, and contributed to seamless user experiences for renowned brands.
 
-My educational background includes a Master of Arts in Management and Technology from New York University and a Bachelor of Science in Commercial Art from Alabama A&M University. I also hold certifications in Security+ and Azure Fundamentals, reflecting my commitment to staying current in the ever-evolving tech landscape.
+My educational background includes a Master of Arts in Management and Technology from New York University and a Bachelor of Science in Commercial Art from Alabama A&M University. I also hold certifications in Security+, AWS and Azure Fundamentals, reflecting my commitment to staying current in the ever-evolving tech landscape.
 
-Outside of my professional endeavors, I am an active member of various organizations, including Toastmasters International, DEV/Color, and the Alabama A&M Alumni Association. These experiences have shaped my leadership skills and commitment to community engagement.
+Outside of my professional endeavors, I am an active member of various organizations, including Toastmasters International, DEV/Color, and a beekeepers apprentice in my local community garden. These experiences have shaped my leadership skills and commitment to community engagement.
 
-In conclusion, I am excited about the opportunity to bring my extensive experience, technical prowess, and passion for user experience to ${this.job().company} . I am confident that my skills align with the requirements of the Senior engineer position and that my contributions would be valuable to your team's continued success.
+In conclusion, I am excited about the opportunity to bring my extensive experience, technical prowess, and passion for user experience to ${this.job().company} . I am confident that my skills align with the requirements of the ${this.job().title} position and that my contributions would be valuable to your team's continued success.
 
 Thank you for considering my application. I look forward to the possibility of discussing how my expertise can contribute to ${this.job().company}'s mission and goals. Please feel free to contact me at 347-471-1701 or tobias.wright@gmail.com to schedule an interview.
 
