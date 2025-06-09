@@ -1,3 +1,27 @@
+A job dashboard to enter and track job applications. Also practice with building in angular
+Features:
+
+    - Track Jobs applied for with
+        -- URL (Friendly)
+        -- Title (input)
+        -- Source (dropdown)
+        -- Date applied (automatic)
+        -- Status, applied, rejected, initial interview, technical interview, final interview, offer
+        -- notes
+    - List jobs applied for, in order of latest applied for
+    - Search by URL or company
+    - Flag duplicates
+    - Ability to view in a dashboard:
+        -- Number of jobs applies for
+        -- Number of jobs applied for in total
+        -- Graph of where jobs are coming from
+## Technical
+    - Frontend: Angular
+    - Backend: Firebase
+    - Tailwind for styling
+- Running locally
+
+
 # LaughingDollop
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.2.
